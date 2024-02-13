@@ -1,0 +1,103 @@
+1) 
+create table stud11(  roll number(4),  att number(3),  status varchar(15),  primary key(roll));
+select * from stud11;
+
+      ROLL        ATT STATUS
+---------- ---------- ---------------
+        77         89 
+        72         40
+        71         80
+        69         45
+
+output :
+SQL> set serveroutput on
+SQL> ;
+  1  Declare
+  2  mroll number(10);
+  3  matt number(10);
+  4  Begin
+  5  mroll:= &mroll;
+  6  select att into matt from stud11 where roll = mroll;
+  7  if matt<75 then
+  8  dbms_output.put_line(mroll||'is detained');
+  9  update stud11 set status='D'where roll=mroll;
+ 10  else
+ 11  dbms_output.put_line(mroll||'is Not detained');
+ 12  update stud11 set status='ND'where roll=mroll;
+ 13  end if;
+ 14  Exception
+ 15  when no_data_found then
+ 16  dbms_output.put_line(mroll||'Not found');
+ 17* End;
+SQL>
+SQL> /
+Enter value for mroll: 77
+old   5: mroll:= &mroll;
+new   5: mroll:= 77;
+77is Not detained
+
+PL/SQL procedure successfully completed.
+
+SQL> select * from stud11;
+
+      ROLL        ATT STATUS
+---------- ---------- ---------------
+        77         89 ND
+        72         40
+        71         80
+        69         45
+
+
+2) 
+create table account_master( acc_no number(10),bal number(10), primary key(acc_no));
+output : 
+
+SQL> declare
+  2  acc number(10);
+  3  bal number(10);
+  4  amt number(10);
+  5  ex1 exception;
+  6  begin
+  7  acc:=&acc;
+  8  amt:=&amt;
+  9  select bal into bal from account_master where acc_no=acc;
+ 10  if amt>bal then
+ 11  raise ex1;
+ 12  else
+ 13  update  account_master set bal=bal-amt where acc_no=acc;
+ 14  end if;
+ 15  exception
+ 16  when ex1 then
+ 17  dbms_output.put_line('Balance innsufficient');
+ 18  end;
+ 19  /
+Enter value for acc: 1234
+old   7: acc:=&acc;
+new   7: acc:=1234;
+Enter value for amt: 500
+old   8: amt:=&amt;
+new   8: amt:=500;
+
+PL/SQL procedure successfully completed.
+
+SQL> /
+Enter value for acc: 1234
+old   7: acc:=&acc;
+new   7: acc:=1234;
+Enter value for amt: 60000
+old   8: amt:=&amt;
+new   8: amt:=60000;
+Balance innsufficient
+
+PL/SQL procedure successfully completed.
+
+SQL> select * from account_master;
+
+    ACC_NO        BAL
+---------- ----------
+      1234       7365
+      4321       8965
+
+
+
+
