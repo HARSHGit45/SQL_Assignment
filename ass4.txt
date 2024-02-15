@@ -99,5 +99,18 @@ SQL> select * from account_master;
       4321       8965
 
 
+SQL> INSERT INTO borrower (roll, dateofissue, nameofbook, status)
+  2  VALUES (77, TO_DATE('2023-12-28', 'YYYY-MM-DD'), 'letusc', 'issued');
+
+1 row created.
+
+SQL> INSERT INTO borrower (roll, dateofissue, nameofbook, status)
+  2  VALUES (72, TO_DATE('2024-02-01', 'YYYY-MM-DD'), 'java', 'issued');
+
+1 row created.
+
+SQL> INSERT INTO borrower (roll, dateofissue, nameofbook, status)
+  2  VALUES (71, TO_DATE('2024-01-15', 'YYYY-MM-DD'), 'nis', 'issued');
+
 
 
