@@ -114,3 +114,56 @@ SQL> INSERT INTO borrower (roll, dateofissue, nameofbook, status)
 
 
 
+
+
+SQL> declare
+  2   r number(3);
+  3   bname varchar(20);
+  4    di date;
+  5  fine number(4);
+  6     dor date;
+  7     diff number(3);
+  8      begin
+  9     r:=&r;
+ 10    select nameofbook,dateofissue into bname,di from borrower where roll=r;
+ 11     select sysdate into dor from dual;
+ 12   diff:=to_date(dor)-to_date(di);
+ 13
+ 14     if diff<15 then
+ 15    dbms_output.put_line('Book was returened');
+ 16   insert into fine_dets(roll,dateofreturn,amount) values(r,dor,0);
+ 17   update borrower
+ 18    set status='returned'
+ 19   where roll=r;
+ 20    elsif diff<=30 then
+ 21  fine:=(diff-15)*5;
+ 22   dbms_output.put_line('Book was returened');
+ 23   insert into fine_dets(roll,dateofreturn,amount) values(r,dor,fine);
+ 24   update borrower
+ 25    set status='returned'
+ 26   where roll=r;
+ 27  else
+ 28  fine:=15*5+((diff-30)*50);
+ 29   dbms_output.put_line('Book was returened');
+ 30   insert into fine_dets(roll,dateofreturn,amount) values(r,dor,fine);
+ 31   update borrower
+ 32    set status='returned'
+ 33   where roll=r;
+ 34  end if;
+ 35
+ 36  end;
+ 37
+ 38
+ 39  /
+Enter value for r: 77
+old   9:    r:=&r;
+new   9:    r:=77;
+
+PL/SQL procedure successfully completed.
+
+SQL> select * from fine_dets;
+
+      ROLL DATEOFRET     AMOUNT
+---------- --------- ----------
+        77 15-FEB-24       1025
+
